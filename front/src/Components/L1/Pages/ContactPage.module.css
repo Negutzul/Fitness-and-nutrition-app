@@ -1,0 +1,49 @@
+.container {
+    width: 400px;
+    margin: 50px auto;
+    background-color: black;
+    border-radius: 20px; /* You can adjust this to get the roundness you want */
+    border: 3px solid #0037ff; /* Neon blue border */
+}
+
+.contact-section {
+    color: white;
+    text-align: center;
+}
+
+.contact-section h2 {
+    font-size: 40px;
+    margin-bottom: 30px;
+}
+
+.section {
+    margin-bottom: 30px;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.section h3 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.section p {
+    font-size: 20px;
+    line-height: 1.6;
+}
+
+/* Add media query for screens less than 400px wide */
+@media only screen and (max-width: 400px) {
+    .container {
+        width: 100%;
+    }
+    .contact-section h2 {
+        font-size: 30px; /* Adjust these sizes as needed */
+    }
+    .section h3 {
+        font-size: 18px;
+    }
+    .section p {
+        font-size: 16px;
+    }
+}

@@ -1,0 +1,239 @@
+import React, { useState } from 'react';
+
+const WorkoutPlanAdder = () => {
+  const [numExercises, setNumExercises] = useState(0);
+  const [exercises, setExercises] = useState([]);
+  const [reps, setReps] = useState([]);
+  const [breaks, setBreaks] = useState([]);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [published, setPublished] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [difficulty, setDifficulty] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (isModalVisible) {
+      const token = JSON.parse(sessionStorage.getItem('access_token'));
+
+      try {
+        const response = await fetch('http://localhost:8080/api/workouts/addWorkouts', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            title,
+            description,
+            published,
+            exercises,
+            reps,
+            breaks,
+            difficulty,
+          }),
+        });
+
+        alert('Workout added successfully!');
+      } catch (error) {
+        alert('Error adding workout.');
+      }
+    } else {
+      setIsModalVisible(true);
+    }
+  };
+
+  const handleModalConfirm = () => {
+    setIsModalVisible(false);
+    handleSubmit(new Event('submit'));
+  };
+
+  const handleModalClose = () => {
+    setIsModalVisible(false);
+  };
+
+  const updateExercise = (index, value) => {
+    setExercises((prevExercises) => {
+      const updatedExercises = [...prevExercises];
+      updatedExercises[index] = value;
+      return updatedExercises;
+    });
+  };
+
+  const updateReps = (index, value) => {
+    setReps((prevReps) => {
+      const updatedReps = [...prevReps];
+      updatedReps[index] = value;
+      return updatedReps;
+    });
+  };
+
+  const updateBreaks = (index, value) => {
+    setBreaks((prevBreaks) => {
+      const updatedBreaks = [...prevBreaks];
+      updatedBreaks[index] = value;
+      return updatedBreaks;
+    });
+  };
+
+  return (
+    <div className="w-full flex justify-center items-center">
+      <div className="w-96">
+        <form onSubmit={handleSubmit}>
+          <div className="mb-6">
+            <label htmlFor="title" className="block mb-2 text-l font-medium text-gray-100 dark:text-white">
+              Title
+            </label>
+            <input
+              type="text"
+              id="title"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              onChange={(e) => setTitle(e.target.value)}
+            ></input>
+          </div>
+          <div className="mb-6">
+            <label htmlFor="description" className="block mb-2 text-l font-medium text-gray-100 dark:text-white">
+              Description
+            </label>
+            <input
+              type="text"
+              id="description"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              onChange={(e) => setDescription(e.target.value)}
+            ></input>
+          </div>
+          <div className="mb-6">
+            <label htmlFor="numExercises" className="block mb-2 text-l font-medium text-gray-100 dark:text-white">
+              Number of exercises:
+            </label>
+            <input
+              type="number"
+              id="numExercises"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              onChange={(e) => setNumExercises(parseInt(e.target.value))}
+            ></input>
+          </div>
+          {Array.from({ length: numExercises }, (_, i) => i).map((_, i) => (
+            <div key={i}>
+              <div className="mb-6">
+                <label htmlFor={`exercise${i}`} className="block mb-2 text-l font-medium text-gray-100 dark:text-white">
+                  Exercise {i + 1}:
+                </label>
+                <input
+                  type="text"
+                  id={`exercise${i}`}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  onChange={(e) => updateExercise(i, e.target.value)}
+                ></input>
+              </div>
+              <div className="mb-6">
+                <label htmlFor={`reps${i}`} className="block mb-2 text-l font-medium text-gray-100 dark:text-white">
+                  Reps:
+                </label>
+                <input
+                  type="number"
+                  id={`reps${i}`}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  onChange={(e) => updateReps(i, parseInt(e.target.value))}
+                ></input>
+              </div>
+              {i !== numExercises - 1 && (
+                <>
+                  <div className="mb-6">
+                    <label htmlFor={`break${i}`} className="block mb-2 text-l font-medium text-gray-100 dark:text-white">
+                      Break time (in seconds):
+                    </label>
+                    <input
+                      type="number"
+                      id={`break${i}`}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      onChange={(e) => updateBreaks(i, parseInt(e.target.value))}
+                    ></input>
+                  </div>
+                </>
+              )}
+              <br />
+            </div>
+          ))}
+          <div className="mb-6">
+            <label htmlFor="difficulty" className="block mb-2 text-l font-medium text-gray-100 dark:text-white">
+              Difficulty
+            </label>
+            <select
+              id="difficulty"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              value={difficulty}
+              onChange={(e) => setDifficulty(e.target.value)}
+            >
+              <option value="">Select Difficulty</option>
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+          </div>
+          <button
+            type="submit"
+            className="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none"
+          >
+            Submit
+          </button>
+        </form>
+
+        {isModalVisible && (
+          <div
+            id="staticModal"
+            data-modal-backdrop="static"
+            tabIndex="-1"
+            aria-hidden="true"
+            className="flex justify-center items-center fixed top-0 left-0 right-0 z-50 bg-gray-500 bg-opacity-30 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
+          >
+            <div className="relative w-full max-w-2xl max-h-full">
+              <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <div className="flex items-start justify-between p-4">
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                    Are you sure you want to submit this workout?
+                  </h3>
+                  <button
+                    type="button"
+                    className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                    data-modal-hide="staticModal"
+                    onClick={handleModalConfirm}
+                  >
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        fillRule="evenodd"
+                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+                <div className="flex items-center p-6 space-x-2">
+                  <button
+                    data-modal-hide="staticModal"
+                    type="button"
+                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    onClick={handleModalConfirm}
+                  >
+                    Yes
+                  </button>
+                  <button
+                    data-modal-hide="staticModal"
+                    type="button"
+                    className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+                    onClick={handleModalClose}
+                  >
+                    No
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default WorkoutPlanAdder;
