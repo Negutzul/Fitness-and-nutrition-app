@@ -1,7 +1,9 @@
 package com.licenta.back.controllers;
 
 import com.licenta.back.models.MealPlan;
+import com.licenta.back.models.WorkoutPlan;
 import com.licenta.back.repository.MealPlanRepository;
+import com.licenta.back.user.Role;
 import com.licenta.back.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/mealPlans")
@@ -59,6 +62,21 @@ public class MealPlanController {
         }
     }
 
-
+    @PutMapping("/changeMealPlan/{id}")
+    public ResponseEntity<MealPlan> updateWorkout(@PathVariable("id") Integer id, @RequestBody MealPlan mealPlan) {
+        Optional<MealPlan> mealData = mealPlanRepository.findById(id);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        if (mealData.isPresent()) {
+            if(user.getRole().equals(Role.ADMIN) || (user.getRole().equals(Role.TRAINER) && mealData.get().getUserID() == user.getId())) {
+                MealPlan _mealPlan = mealData.get();
+                _mealPlan.setTitle(mealPlan.getTitle());
+                _mealPlan.setDescription(mealPlan.getDescription());
+                _mealPlan.setPublished(mealPlan.isPublished());
+                return new ResponseEntity<>(mealPlanRepository.save(_mealPlan), HttpStatus.OK);
+            }else return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 
 }

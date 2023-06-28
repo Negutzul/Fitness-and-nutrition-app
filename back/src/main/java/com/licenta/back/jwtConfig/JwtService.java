@@ -35,10 +35,11 @@ public class JwtService {
     return claimsResolver.apply(claims);
   }
 
-  public String generateToken(UserDetails userDetails, Role role) {
+  public String generateToken(UserDetails userDetails, Role role,Integer id) {
 
     Map<String, String> claims = new HashMap<>();
     claims.put("Role", String.valueOf(role));
+    claims.put("id", String.valueOf(id));
     return generateToken(claims, userDetails);
   }
 

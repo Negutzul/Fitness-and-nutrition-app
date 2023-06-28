@@ -53,7 +53,7 @@ public class AuthenticationService {
     savedUser.setLocker(savedLock);
     repository.save(savedUser);
 
-    var jwtToken = jwtService.generateToken(user,user.getRole());
+    var jwtToken = jwtService.generateToken(user,user.getRole(),user.getId());
     var refreshToken = jwtService.generateRefreshToken(user);
     saveUserToken(savedUser, jwtToken);
     return AuthenticationResponse.builder()
@@ -81,7 +81,7 @@ public class AuthenticationService {
     savedUser.setLocker(savedLock);
     repository.save(savedUser);
 
-    var jwtToken = jwtService.generateToken(user,user.getRole());
+    var jwtToken = jwtService.generateToken(user,user.getRole(),user.getId());
     var refreshToken = jwtService.generateRefreshToken(user);
 
     saveUserToken(savedUser, jwtToken);
@@ -110,7 +110,7 @@ public class AuthenticationService {
     savedUser.setLocker(savedLock);
     repository.save(savedUser);
 
-    var jwtToken = jwtService.generateToken(user,user.getRole());
+    var jwtToken = jwtService.generateToken(user,user.getRole(),user.getId());
     var refreshToken = jwtService.generateRefreshToken(user);
 
     saveUserToken(savedUser, jwtToken);
@@ -129,7 +129,7 @@ public class AuthenticationService {
     );
     var user = repository.findByEmail(request.getEmail())
         .orElseThrow();
-    var jwtToken = jwtService.generateToken(user,user.getRole());
+    var jwtToken = jwtService.generateToken(user,user.getRole(),user.getId());
     var refreshToken = jwtService.generateRefreshToken(user);
     revokeAllUserTokens(user);
     saveUserToken(user, jwtToken);
@@ -177,7 +177,7 @@ public class AuthenticationService {
       var user = this.repository.findByEmail(userEmail)
               .orElseThrow();
       if (jwtService.isTokenValid(refreshToken, user)) {
-        var accessToken = jwtService.generateToken(user,user.getRole());
+        var accessToken = jwtService.generateToken(user,user.getRole(),user.getId());
         revokeAllUserTokens(user);
         saveUserToken(user, accessToken);
         var authResponse = AuthenticationResponse.builder()

@@ -53,6 +53,9 @@ public class MealPlan {
         return id;
     }
 
+    public Integer getUserID(){
+        return user.getId();
+    }
     public String getTitle() {
         return title;
     }
