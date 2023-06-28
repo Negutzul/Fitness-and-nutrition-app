@@ -1,8 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-const Home = () => {
+const Home = ({setImage}) => {
   const navigate = useNavigate();
+  const backgroundImageUrl = require('./../../../fitness-muscular-man-rear-shot-o7hjg0p7g1afqd8t.jpg');
+  setImage(backgroundImageUrl);
     useEffect(() => {
         const key = 'tokenFitceps';
         

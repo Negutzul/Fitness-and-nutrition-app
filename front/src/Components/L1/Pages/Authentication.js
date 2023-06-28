@@ -3,7 +3,11 @@ import Login from "../../L2/AuthenticationComponents/Login"
 import Register from "../../L2/AuthenticationComponents/Register"
 import PageContentWrapper from "../../L2/PageContentWrapper";
 import { useEffect, useState } from "react";
-const Authentication = () => {
+const Authentication = ({setImage}) => {
+
+  const backgroundImageUrl = require('./../../../auth1.jpg');
+  setImage(backgroundImageUrl);
+
   const [loginOpen,setLoginOpen] = useState(true)
   const [authenticated,setAuthenticated] = useState(false)
   useEffect(()=>{

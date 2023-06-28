@@ -9,24 +9,26 @@ import Locker from "./Pages/Locker";
 import NoPage from "./Pages/NoPage";
 import "./styles.css";
 import ElementAdder from "./Pages/ElementAdder";
+import RegisterTrainer from "./Pages/RegisterTrainer";
 
-const NavigationMenu = () =>{
+const NavigationMenu = ({setImage}) =>{
 
     return (
         <>
             <div>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<Layout />}>
-                        <Route index element={<Home />} />
-                        <Route path="MealPlans" element={<MealPlans />} />
-                        <Route path="Home" element={<Home />} />
-                        <Route path="Workouts" element={<Workouts />} />
-                        <Route path="Locker" element={<Locker />} />
-                        <Route path="Authentication" element={<Authentication />} />
-                        <Route path="Contact" element={<Contact />} />
-                        <Route path="AddContent" element={<ElementAdder />} />
-                        <Route path="*" element={<NoPage />} />
+                    <Route path="/" element={<Layout setImage = {setImage}/>}>
+                        <Route index element={<Home setImage = {setImage}/>} />
+                        <Route path="MealPlans" element={<MealPlans setImage = {setImage}/>} />
+                        <Route path="Home" element={<Home setImage = {setImage}/>} />
+                        <Route path="Workouts" element={<Workouts setImage = {setImage}/>} />
+                        <Route path="Locker" element={<Locker setImage = {setImage}/>} />
+                        <Route path="Authentication" element={<Authentication setImage = {setImage}/>} />
+                        <Route path="Contact" element={<Contact setImage = {setImage}/>} />
+                        <Route path="AddContent" element={<ElementAdder setImage = {setImage}/>} />
+                        <Route path="AddTrainer" element={<RegisterTrainer setImage = {setImage}/>} />
+                        <Route path="*" element={<NoPage setImage = {setImage}/>} />
                     </Route>
                 </Routes>
             </BrowserRouter>

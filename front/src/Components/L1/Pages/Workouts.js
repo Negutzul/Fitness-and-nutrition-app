@@ -2,10 +2,14 @@ import React, { useEffect, useState } from "react";
 import PageContentWrapper from "../../L2/PageContentWrapper";
 import WorkoutItemWrapper from "../../L2/WorkoutsComponents/WorkoutItemWrapper";
 
-const Workouts = () => {
+const Workouts = ({setImage}) => {
+  
   const [showModal, setShowModal] = useState(false);
   const [selectedWorkout, setSelectedWorkout] = useState(null);
   const [workouts, setWorkouts] = useState([]);
+
+  const backgroundImageUrl = require('./../../../fitness-muscular-man-rear-shot-o7hjg0p7g1afqd8t.jpg');
+  setImage(backgroundImageUrl);
 
   const token = JSON.parse(sessionStorage.getItem('access_token'));
 

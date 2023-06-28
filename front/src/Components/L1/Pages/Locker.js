@@ -3,7 +3,9 @@ import { Button, Form } from 'react-bootstrap';
 import styles from './Locker.module.css'; // This is where we will keep our CSS.
 import Modal from 'react-modal';
 
-const Locker = () => {
+const Locker = ({setImage}) => {
+  const backgroundImageUrl = require('./../../../locker.jpg');
+  setImage(backgroundImageUrl);
   const [notes, setNotes] = useState("");
   const [show, setShow] = useState(false);
   const [message, setMessage] = useState("");

@@ -76,8 +76,13 @@ const Layout = () => {
                             <Navbar.Link href="/Contact" className={navLinkClass} style={navLinkStyle}>Contact</Navbar.Link>
 
                             {/* Page only available to ADMIN */}
-                            {userRole === 'ADMIN' &&
+                            {(userRole === 'ADMIN' || userRole === 'TRAINER') &&<>
                                 <Navbar.Link href="/AddContent" className={navLinkClass} style={navLinkStyle}>Add Content</Navbar.Link>
+                                </>
+                            }
+                            {userRole === 'ADMIN' &&<>
+                            <Navbar.Link href="/AddTrainer" className={navLinkClass} style={navLinkStyle}>AddTrainer</Navbar.Link>
+                            </>
                             }
                         </>
                     }

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styles from './MealPlans.module.css';
 
-const MealPlans = () => {
+const MealPlans = ({setImage}) => {
+  const backgroundImageUrl = require('./../../../mealplan.jpg');
+  setImage(backgroundImageUrl);
   const [mealPlans, setMealPlans] = useState([]);
   const [selectedMealPlan, setSelectedMealPlan] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);

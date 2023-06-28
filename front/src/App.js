@@ -1,12 +1,13 @@
+import { useState } from 'react';
 import './App.css';
 import NavigationMenu from './Components/L1/NavigationMenu';
 
 function App() {
-
   const backgroundImageUrl = require('./Images/contact.jpg');
+  const [image,setImage] = useState(backgroundImageUrl)
 
     const backgroundStyle = {
-      backgroundImage: `url(${backgroundImageUrl})`,
+      backgroundImage: `url(${image})`,
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       overflowY: 'scroll',    
@@ -18,9 +19,8 @@ function App() {
 
   
   return (
-    
     <div  style={backgroundStyle}>
-      <NavigationMenu/>
+      <NavigationMenu setImage={setImage}/>
     </div>
   );
 }
