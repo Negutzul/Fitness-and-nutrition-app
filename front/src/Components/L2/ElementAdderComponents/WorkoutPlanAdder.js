@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 const WorkoutPlanAdder = ({PnumExercises,Pexercises,Preps,Pbreaks,Ptitle,Pdescription,Pdifficulty,PeditId,closeModal}) => {
-  const [numExercises, setNumExercises] = useState(0);
+  const [numExercises, setNumExercises] = useState(1);
   const [exercises, setExercises] = useState([]);
   const [reps, setReps] = useState([]);
   const [breaks, setBreaks] = useState([]);
@@ -28,10 +28,9 @@ const WorkoutPlanAdder = ({PnumExercises,Pexercises,Preps,Pbreaks,Ptitle,Pdescri
     if (isModalVisible) {
       const token = JSON.parse(sessionStorage.getItem('access_token'));
 
-      try {
+      
         var api = 'http://localhost:8080/api/workouts/addWorkouts';
         PeditId && (api = 'http://localhost:8080/api/workouts/changeWorkouts/' + PeditId)
-        debugger
         const response = await fetch(api, {
           method: PeditId ? 'PUT' :'POST',
           headers: {
@@ -48,9 +47,9 @@ const WorkoutPlanAdder = ({PnumExercises,Pexercises,Preps,Pbreaks,Ptitle,Pdescri
             difficulty,
           }),
         });
-
-        alert('Workout added successfully!');
-      } catch (error) {
+        if (response.ok) {
+        alert('Workout added successfully!');}
+       else{
         alert('Error adding workout.');
       }
     } else {
@@ -106,6 +105,10 @@ const WorkoutPlanAdder = ({PnumExercises,Pexercises,Preps,Pbreaks,Ptitle,Pdescri
               id="title"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               onChange={(e) => setTitle(e.target.value)}
+              pattern=".*\S+.*" // Ensures at least one non-whitespace character is entered
+              required
+                 onInput={(e) => e.target.setCustomValidity("")}
+                 onInvalid={(e) => e.target.setCustomValidity("Enter a valid title")}
             ></input>
           </div>
           <div className="mb-6">
@@ -118,6 +121,10 @@ const WorkoutPlanAdder = ({PnumExercises,Pexercises,Preps,Pbreaks,Ptitle,Pdescri
               id="description"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               onChange={(e) => setDescription(e.target.value)}
+              pattern=".*\S+.*" // Ensures at least one non-whitespace character is entered
+              required
+                 onInput={(e) => e.target.setCustomValidity("")}
+                 onInvalid={(e) => e.target.setCustomValidity("Enter a valid description")}
             ></input>
           </div>
           <div className="mb-6">
@@ -125,12 +132,19 @@ const WorkoutPlanAdder = ({PnumExercises,Pexercises,Preps,Pbreaks,Ptitle,Pdescri
               Number of exercises:
             </label>
             <input
-              value={numExercises}
-              type="number"
-              id="numExercises"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              onChange={(e) => setNumExercises(parseInt(e.target.value))}
-            ></input>
+  value={numExercises}
+  type="number"
+  id="numExercises"
+  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+  onChange={(e) => {
+    const value = parseInt(e.target.value);
+    if (value > 0) {
+      setNumExercises(value);
+    } else {
+      setNumExercises(1); // Set a default value or any other appropriate action
+    }
+  }}
+/>
           </div>
           {Array.from({ length: numExercises }, (_, i) => i).map((_, i) => (
             <div key={i}>
@@ -144,6 +158,10 @@ const WorkoutPlanAdder = ({PnumExercises,Pexercises,Preps,Pbreaks,Ptitle,Pdescri
                   id={`exercise${i}`}
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   onChange={(e) => updateExercise(i, e.target.value)}
+                  pattern=".*\S+.*" // Ensures at least one non-whitespace character is entered
+                  required
+                     onInput={(e) => e.target.setCustomValidity("")}
+                     onInvalid={(e) => e.target.setCustomValidity("Enter a valid exercise")}
                 ></input>
               </div>
               <div className="mb-6">
@@ -155,7 +173,8 @@ const WorkoutPlanAdder = ({PnumExercises,Pexercises,Preps,Pbreaks,Ptitle,Pdescri
                   type="number"
                   id={`reps${i}`}
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  onChange={(e) => updateReps(i, parseInt(e.target.value))}
+                  onChange={(e) => {if (e.target.value > 0) updateReps(i, parseInt(e.target.value))}}
+                  required
                 ></input>
               </div>
               {i !== numExercises - 1 && (
@@ -169,7 +188,8 @@ const WorkoutPlanAdder = ({PnumExercises,Pexercises,Preps,Pbreaks,Ptitle,Pdescri
                       type="number"
                       id={`break${i}`}
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      onChange={(e) => updateBreaks(i, parseInt(e.target.value))}
+                      onChange={(e) => {if (e.target.value > 0) updateBreaks(i, parseInt(e.target.value))}}
+                      required
                     ></input>
                   </div>
                 </>

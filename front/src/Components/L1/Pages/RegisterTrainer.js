@@ -46,7 +46,7 @@ const RegisterTrainer = ({ setLoginOpen ,setImage}) => {
     if (response.ok) {
       setModalMessage('Registration successful!');
     } else {
-      setModalMessage('Registration failed!');
+      setModalMessage("Registration failed! \n An account with the specified email already exists");
     }
     setModalVisible(true);
   };
@@ -61,7 +61,7 @@ const RegisterTrainer = ({ setLoginOpen ,setImage}) => {
       <div className="fixed inset-0 flex items-center justify-center z-50 overflow-auto">
         <div className="bg-gray-900 absolute inset-0 opacity-75"></div>
         <div className="bg-white p-8 rounded-lg text-black relative" style={{ maxHeight: '80vh', overflowY: 'auto' }}><div className="modal">
-          <span>{modalMessage}</span> <br/>
+          <span style={{whiteSpace: 'pre-line'}}>{modalMessage}</span> <br/>
           <button onClick={() => setModalVisible(false)}className="mt-4 inline-block bg-red-800 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700"
             >Close</button>
         </div></div>

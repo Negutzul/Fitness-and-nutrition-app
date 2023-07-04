@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Form } from 'react-bootstrap';
-import styles from './Locker.module.css'; // This is where we will keep our CSS.
+import styles from './Locker.module.css'; 
 import Modal from 'react-modal';
 
 const Locker = ({setImage}) => {
@@ -117,14 +117,16 @@ const Locker = ({setImage}) => {
       }
     }}
   >
-  <h2 className={styles.modalText}>Confirm Submission</h2>
   <p className={styles.modalText}>Do you want to submit the changes?</p>
-  <Button variant="secondary" onClick={handleClose}>
+  <div style={{display: 'flex',
+  flexDirection: 'row'}}>
+  <Button variant="secondary" onClick={handleClose} className="text-white mt-2 bg-red-700 hover:bg-red-800 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 focus:outline-none">
     Close
   </Button>
-  <Button variant="primary" onClick={handleSubmit}>
+  <Button variant="primary" onClick={handleSubmit} className="text-white mt-2 bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none">
     Save Changes
   </Button>
+  </div>
 </Modal>
   
       {message && (

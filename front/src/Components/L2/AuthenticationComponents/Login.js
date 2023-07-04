@@ -45,7 +45,6 @@ const Login = ({setLoginOpen,setAuthenticated}) => {
       }, 2000);
     } else {
     const jsonData = await response.json();
-    debugger
 
     sessionStorage.setItem('access_token', JSON.stringify(jsonData.access_token));
 

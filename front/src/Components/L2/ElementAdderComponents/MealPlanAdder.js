@@ -14,7 +14,6 @@ const MealPlanAdder = () => {
     if (isModalVisible) {
       const token = JSON.parse(sessionStorage.getItem('access_token'));
 
-      try {
         const response = await fetch('http://localhost:8080/api/mealPlans/addMealPlan', {
           method: 'POST',
           headers: {
@@ -27,9 +26,9 @@ const MealPlanAdder = () => {
             bodyType
           }),
         });
-
+        if (response.ok) {
         alert('Workout added successfully!');
-      } catch (error) {
+      } else  {
         alert('Error adding workout.');
       }
     } else {
@@ -59,6 +58,10 @@ const MealPlanAdder = () => {
               id="title"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               onChange={(e) => setTitle(e.target.value)}
+              pattern=".*\S+.*" // Ensures at least one non-whitespace character is entered
+              required
+                 onInput={(e) => e.target.setCustomValidity("")}
+                 onInvalid={(e) => e.target.setCustomValidity("Enter a valid title")}
             ></input>
           </div>
           <div className="mb-6">
@@ -70,6 +73,10 @@ const MealPlanAdder = () => {
               id="description"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               onChange={(e) => setDescription(e.target.value)}
+              pattern=".*\S+.*" // Ensures at least one non-whitespace character is entered
+              required
+                 onInput={(e) => e.target.setCustomValidity("")}
+                 onInvalid={(e) => e.target.setCustomValidity("Enter a valid description")}
             ></input>
           </div>
          

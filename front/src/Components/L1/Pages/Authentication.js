@@ -21,7 +21,7 @@ const Authentication = ({setImage}) => {
   },[])
     return <PageContentWrapper>
       {authenticated ? <AlreadyLoggedIn token={sessionStorage.getItem('access_token')} setAuthenticated={setAuthenticated}/> :
-      (loginOpen ? <Login setLoginOpen={setLoginOpen} setAuthenticated={setAuthenticated}/> : <Register setLoginOpen={setLoginOpen}/>)}
+      (loginOpen ? <Login setLoginOpen={setLoginOpen} setAuthenticated={setAuthenticated}/> : <Register setLoginOpen={setLoginOpen} setAuthenticated={setAuthenticated}/>)}
       </PageContentWrapper>;
   };
   

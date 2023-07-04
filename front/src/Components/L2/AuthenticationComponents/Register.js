@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import "./styles.css";
+import { useNavigate } from "react-router-dom";
 
-
-const Register = ({setLoginOpen}) => {
+const Register = ({setLoginOpen,setAuthenticated}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
 
+  const navigate  = useNavigate();
+  
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
@@ -38,6 +40,31 @@ const Register = ({setLoginOpen}) => {
         "password": password   
       })
     })
+    if (!response.ok) {
+      const notification = document.createElement('div');  
+      notification.textContent = `Error: ` + 'the email is already used';
+      notification.style.position = 'fixed';
+      notification.style.top = '50%';
+      notification.style.left = '50%';
+      notification.style.transform = 'translate(-50%, -50%)';
+      notification.style.padding = '10px';
+      notification.style.backgroundColor = 'red';
+      notification.style.color = 'white';
+      notification.style.borderRadius = '5px';
+      document.body.appendChild(notification);
+      setTimeout(() => {
+        notification.remove();
+      }, 2000);
+    } else {
+    const jsonData = await response.json();
+
+    sessionStorage.setItem('access_token', JSON.stringify(jsonData.access_token));
+
+    const sessionData = JSON.parse(sessionStorage.getItem('access_token'));
+    setAuthenticated(true);
+    navigate("/");
+    }
+
   };
   
   const handleRegisterToLogin = () =>{
@@ -65,12 +92,16 @@ const Register = ({setLoginOpen}) => {
           <label className="block mb-2 text-sm font-medium text-gray-100 dark:text-white">Email</label>
           <input type="text"
                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                 value={email} placeholder="Email" onChange={handleEmailChange} required>
+                 value={email} placeholder="Email" onChange={handleEmailChange} pattern="[^\s@]+@[^\s@]+\.[^\s.]+"
+                 required       
+                 onInput={(e) => e.target.setCustomValidity("")}
+                 onInvalid={(e) => e.target.setCustomValidity("Enter a valid email address (with the format text@text.text)")}
+                 >
           </input>
         </div>
         <div className="mb-6">
           <label className="block mb-2 text-sm font-medium text-gray-100 dark:text-white">Password</label>
-          <input type="text"
+          <input type="password"
                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                  value={password} placeholder="Password" onChange={handlePasswordChange} required>
           </input>
