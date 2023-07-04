@@ -6,7 +6,7 @@ const UserRemover = ({ setLoginOpen ,setImage}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
 
-  const backgroundImageUrl = require('./../../../addTrainer.jpg');
+  const backgroundImageUrl = require('./../../../removeContent.jpg');
   setImage(backgroundImageUrl);
 
   const handleToBeRemovedId = (e) => {
@@ -15,18 +15,24 @@ const UserRemover = ({ setLoginOpen ,setImage}) => {
 
 
   const handleRegisterFormSubmit = async (e) => {
+    
     e.preventDefault();
+    
+    const token = JSON.parse(sessionStorage.getItem('access_token'));
+
     const response = await fetch(('http://localhost:8080/api/v1/admin/deleteUser/' + toBeRemovedId), {
       method: "DELETE",
       headers: {
         'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
       },
+      body: '',
     });
 
     if (response.ok) {
-      setModalMessage('Registration successful!');
+      setModalMessage('User removed successfuly!');
     } else {
-      setModalMessage('Registration failed!');
+      setModalMessage('Removing user failed!');
     }
     setModalVisible(true);
   };
@@ -47,7 +53,7 @@ const UserRemover = ({ setLoginOpen ,setImage}) => {
       {<form className="w-full flex justify-center items-center" onSubmit={handleRegisterFormSubmit}>
       <div className="w-96">
         <div className="mb-6">
-          <label className="block mb-2 text-sm font-medium text-gray-100 dark:text-white">User id</label>
+          <label className="block mb-2 text-sm font-medium text-black dark:text-white">User id</label>
           <input type="text"
                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                  value={toBeRemovedId} placeholder="Enter the id of the user you want to remove" onChange={handleToBeRemovedId} required>

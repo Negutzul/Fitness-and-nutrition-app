@@ -85,16 +85,10 @@ public class AdminController {
                     wk.getBreaks().clear();
                     favoriteswkInterface.deleteByWorkoutPlanId(wk.getId());
                 }
-
                 workoutRepository.deleteByUserId(userID);
-
-
                 lockerRepository.deleteByUserId(userID);
-
                 workoutRepository.deleteByUserId(userID);
-
                 userRepository.deleteById(userID);
-
                 return ResponseEntity.ok("user removed succcesfuly");
             }catch (Exception e){
                 return new ResponseEntity<>("error admin contact suport", HttpStatus.INTERNAL_SERVER_ERROR);
