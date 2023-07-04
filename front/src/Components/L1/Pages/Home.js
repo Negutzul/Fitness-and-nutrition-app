@@ -41,10 +41,10 @@ const Home = ({setImage}) => {
               and support needed to achieve your fitness goals and unlock your true potential.
             </p>
             <button
-              onClick={toggleModal}
+              onClick={()=>navigate("/Contact")}
               className="mt-8 inline-block bg-white text-blue-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200"
             >
-              Join Our Elite Community
+              Leave a message for our Elite Community
             </button>
           </div>
         </div>
@@ -108,7 +108,7 @@ const Home = ({setImage}) => {
       <footer className="py-8">
         <div className="container mx-auto px-4">
           <p className="text-center text-white">
-            &copy; {new Date().getFullYear()} Your Workout Site. All rights reserved.
+            &copy; {new Date().getFullYear()} Neagu Andrei License. All rights reserved.
           </p>
         </div>
       </footer>

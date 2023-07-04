@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import PageContentWrapper from "../../L2/PageContentWrapper";
 import WorkoutItemWrapper from "../../L2/WorkoutsComponents/WorkoutItemWrapper";
-
+import jwt_decode from 'jwt-decode';
 const Workouts = ({setImage}) => {
   
   const [showModal, setShowModal] = useState(false);
   const [selectedWorkout, setSelectedWorkout] = useState(null);
   const [workouts, setWorkouts] = useState([]);
+  const [refreshPage,setRefreshPage] = useState(false);
+  const [canEditModal,setCanEditModal] = useState(false); 
 
   const backgroundImageUrl = require('./../../../fitness-muscular-man-rear-shot-o7hjg0p7g1afqd8t.jpg');
   setImage(backgroundImageUrl);
@@ -41,7 +43,18 @@ const Workouts = ({setImage}) => {
   const toggleModal = (workout) => {
     setSelectedWorkout(workout);
     setShowModal(!showModal);
+    const decodedToken = jwt_decode(token);
+    if(workout)
+    if(workout.userID == Number(decodedToken.id) || decodedToken.Role == "ADMIN")
+      setCanEditModal(true);
+      else
+      setCanEditModal(false)
   };
+  
+  const handleDelete = () =>{
+
+    setRefreshPage((state) => !state)
+  }
 
   return (
     <PageContentWrapper>
@@ -64,7 +77,22 @@ const Workouts = ({setImage}) => {
               className="mt-4 inline-block bg-red-800 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700"
             >
               Close
-            </button>
+            </button> &nbsp; 
+            {
+            canEditModal && 
+              <><button
+              onClick={() => toggleModal(null)}
+              className="mt-4 inline-block bg-blue-800 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700"
+            >
+              Edit
+            </button> &nbsp; 
+            <button
+              onClick={() => handleDelete(null)}
+              className="mt-4 inline-block bg-red-800 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700"
+            >
+              Delete
+            </button></>
+            }
           </div>
         </div>
       )}

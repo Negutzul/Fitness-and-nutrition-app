@@ -12,7 +12,7 @@ const Contact = () => {
         </div>
 
         <div className={styles.section}>
-          <h3>Content Problem</h3>
+          <h3>Leave a message to our non-technical support team</h3>
           <p>Phone: +40761644303</p>
           <p>Email: neaguandrei47@yahoo.com</p>
         </div>
