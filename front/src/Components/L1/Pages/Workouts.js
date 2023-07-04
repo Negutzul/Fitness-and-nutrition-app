@@ -39,9 +39,8 @@ const Workouts = ({setImage}) => {
         console.error('Error fetching workouts:', error);
       }
     };
-    setTimeout(() => {
-      fetchWorkouts();
-    }, "600");
+    
+    fetchWorkouts();
     
   }, [refreshList]);
 
@@ -90,6 +89,9 @@ const Workouts = ({setImage}) => {
     } catch (error) {
       console.error('Error:', error);
     }
+    setTimeout(() => {
+      setRefreshList((state)=>!state)
+    }, 700);
     closeModal();
   };
 
@@ -104,7 +106,11 @@ const Workouts = ({setImage}) => {
   <div className="bg-white p-8 rounded-lg text-black relative" style={{ maxHeight: '80vh', overflowY: 'auto' }}>
     <WorkoutPlanAdder PnumExercises={selectedWorkout.exercises.length} Pexercises={selectedWorkout.exercises} Preps={selectedWorkout.reps}
      Pbreaks={selectedWorkout.breaks} Ptitle={selectedWorkout.title} Pdescription={selectedWorkout.description} 
-     Pdifficulty={selectedWorkout.difficulty} PeditId={selectedWorkout.id} closeModal={closeModal}/><button
+     Pdifficulty={selectedWorkout.difficulty} PeditId={selectedWorkout.id} closeModal={()=>{
+      setTimeout(() => {
+        setRefreshList((state)=>!state)
+      }, 700);
+      closeModal()}}/><button
               onClick={() => closeModal(null)}
               className="mt-4 inline-block bg-red-800 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700"
             >

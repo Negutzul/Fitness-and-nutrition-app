@@ -28,8 +28,8 @@ const MealPlans = ({setImage}) => {
       const data = await response.json();
       setMealPlans(data);
     };
-
     fetchData();
+    
   }, [refreshList]);
 
   const openModal = (mealPlan) => {
@@ -84,7 +84,9 @@ const MealPlans = ({setImage}) => {
     } catch (error) {
       console.error('Error:', error);
     }
-    setRefreshList((state)=>!state)
+    setTimeout(() => {
+      setRefreshList((state)=>!state)
+    }, 700);
     closeModal()
   };
 
@@ -112,7 +114,9 @@ const MealPlans = ({setImage}) => {
     } catch (error) {
       console.error('Error:', error);
     }
-    setRefreshList((state)=>!state)
+    setTimeout(() => {
+      setRefreshList((state)=>!state)
+    }, 700);
     closeModal()
   };
 
@@ -176,15 +180,13 @@ return (
         
           <p></p>
             {canEditModal &&
-            <button onClick={()=>setEditModalOpen(true)} style={{border :'5px solid blue',borderRadius: "10px",background:'blue' ,color:"white"}}>Edit</button>
-            }
-            <p></p>
+            <button onClick={()=>setEditModalOpen(true)} style={{border :'5px solid blue',padding:"5px",borderRadius: "10px",background:'blue' ,color:"white"}}>Edit</button>
+            } &nbsp;
               {canEditModal &&
-              <button onClick={handleDelete} style={{border :'5px solid blue',borderRadius: "10px",background:'blue' ,color:"white"}}>Delete</button>
+              <button onClick={handleDelete} style={{border :'5px solid blue',borderRadius: "10px",padding:"5px",background:'blue' ,color:"white"}}>Delete</button>
               }
-            <p></p>
-            
-            <button onClick={closeModal} style={{border :'5px solid red',borderRadius: "10px",background:'red' ,color:"white"}}>Close</button>
+            &nbsp;
+            <button onClick={closeModal} style={{border :'5px solid red',borderRadius: "10px",background:'red' ,padding:"5px",color:"white"}}>Close</button>
           </div>
         </div>
       ))}

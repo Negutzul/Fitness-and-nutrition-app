@@ -28,12 +28,31 @@ const Login = ({setLoginOpen,setAuthenticated}) => {
         "password": password   
       })
     })
+    if (!response.ok) {
+      const notification = document.createElement('div');  
+      notification.textContent = `Error: ` + 'the entered credentials are not valid';
+      notification.style.position = 'fixed';
+      notification.style.top = '50%';
+      notification.style.left = '50%';
+      notification.style.transform = 'translate(-50%, -50%)';
+      notification.style.padding = '10px';
+      notification.style.backgroundColor = 'red';
+      notification.style.color = 'white';
+      notification.style.borderRadius = '5px';
+      document.body.appendChild(notification);
+      setTimeout(() => {
+        notification.remove();
+      }, 2000);
+    } else {
     const jsonData = await response.json();
+    debugger
+
     sessionStorage.setItem('access_token', JSON.stringify(jsonData.access_token));
 
     const sessionData = JSON.parse(sessionStorage.getItem('access_token'));
     setAuthenticated(true);
     navigate("/");
+    }
 
   };
 
