@@ -81,7 +81,8 @@ const Layout = () => {
                                 </>
                             }
                             {userRole === 'ADMIN' &&<>
-                            <Navbar.Link href="/AddTrainer" className={navLinkClass} style={navLinkStyle}>AddTrainer</Navbar.Link>
+                            <Navbar.Link href="/AddTrainer" className={navLinkClass} style={navLinkStyle}>Add Trainer</Navbar.Link>
+                            <Navbar.Link href="/RemoveUser" className={navLinkClass} style={navLinkStyle}>Remove User</Navbar.Link>
                             </>
                             }
                         </>

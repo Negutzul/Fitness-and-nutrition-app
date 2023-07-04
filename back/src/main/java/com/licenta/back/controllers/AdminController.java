@@ -15,16 +15,12 @@ package com.licenta.back.controllers;
         import lombok.RequiredArgsConstructor;
         import org.springframework.http.HttpStatus;
         import org.springframework.http.ResponseEntity;
-        import org.springframework.security.access.annotation.Secured;
         import org.springframework.security.access.prepost.PreAuthorize;
         import org.springframework.security.core.Authentication;
         import org.springframework.security.core.context.SecurityContextHolder;
-        import org.springframework.security.core.userdetails.UserDetails;
         import org.springframework.web.bind.annotation.*;
 
-        import java.beans.Transient;
         import java.util.List;
-        import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/admin")
@@ -68,10 +64,9 @@ public class AdminController {
     }
 
     @Transactional
-    @DeleteMapping("/deleteUser")
-    public Object deleteUser(
-            @RequestBody Map<String, Integer> requestBody) {
-        Integer userID = requestBody.get("userID");
+    @DeleteMapping("/deleteUser/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable("id") Integer id) {
+        Integer userID = id;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         if(user.getRole().equals(Role.ADMIN))

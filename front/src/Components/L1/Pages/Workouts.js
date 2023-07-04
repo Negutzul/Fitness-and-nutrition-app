@@ -2,13 +2,15 @@ import React, { useEffect, useState } from "react";
 import PageContentWrapper from "../../L2/PageContentWrapper";
 import WorkoutItemWrapper from "../../L2/WorkoutsComponents/WorkoutItemWrapper";
 import jwt_decode from 'jwt-decode';
+import WorkoutPlanAdder from "../../L2/ElementAdderComponents/WorkoutPlanAdder";
 const Workouts = ({setImage}) => {
   
   const [showModal, setShowModal] = useState(false);
   const [selectedWorkout, setSelectedWorkout] = useState(null);
   const [workouts, setWorkouts] = useState([]);
-  const [refreshPage,setRefreshPage] = useState(false);
+  const [refreshList,setRefreshList] = useState(false);
   const [canEditModal,setCanEditModal] = useState(false); 
+  const [editSelected,setEditSelected] = useState(false); 
 
   const backgroundImageUrl = require('./../../../fitness-muscular-man-rear-shot-o7hjg0p7g1afqd8t.jpg');
   setImage(backgroundImageUrl);
@@ -37,12 +39,16 @@ const Workouts = ({setImage}) => {
         console.error('Error fetching workouts:', error);
       }
     };
-    fetchWorkouts();
-  }, []);
+    setTimeout(() => {
+      fetchWorkouts();
+    }, "600");
+    
+  }, [refreshList]);
 
-  const toggleModal = (workout) => {
+  const openModal = (workout) => {
     setSelectedWorkout(workout);
-    setShowModal(!showModal);
+    setShowModal(true);
+
     const decodedToken = jwt_decode(token);
     if(workout)
     if(workout.userID == Number(decodedToken.id) || decodedToken.Role == "ADMIN")
@@ -50,18 +56,63 @@ const Workouts = ({setImage}) => {
       else
       setCanEditModal(false)
   };
-  
-  const handleDelete = () =>{
 
-    setRefreshPage((state) => !state)
-  }
+  const closeModal = () => {
+    setSelectedWorkout(null);
+    setShowModal(false);
+    setEditSelected(false);
+
+    const decodedToken = jwt_decode(token);
+    setRefreshList((state)=>!state)
+  };
+  
+  const handleDelete = async (e) => {
+    e.preventDefault();
+
+    const token = JSON.parse(sessionStorage.getItem('access_token'));
+
+    const api = 'http://localhost:8080/api/workouts/DeleteWorkout/' + selectedWorkout.id;
+    try {
+      const response = await fetch(api, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: '',
+      });
+
+      if (response.ok) {
+        console.log('Post deleted successfully');
+      } else {
+        console.error('Failed to delete post');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+    closeModal();
+  };
+
 
   return (
     <PageContentWrapper>
       {workouts.map((workout) => (
-        <WorkoutItemWrapper workout={workout} onCardClick={toggleModal} key={workout.id} />
+        <WorkoutItemWrapper workout={workout} onCardClick={openModal} key={workout.id} />
       ))}
-      {showModal && selectedWorkout && (
+      {showModal && selectedWorkout && (editSelected ? <div className="fixed inset-0 flex items-center justify-center z-50 overflow-auto">
+  <div className="bg-gray-900 absolute inset-0 opacity-75"></div>
+  <div className="bg-white p-8 rounded-lg text-black relative" style={{ maxHeight: '80vh', overflowY: 'auto' }}>
+    <WorkoutPlanAdder PnumExercises={selectedWorkout.exercises.length} Pexercises={selectedWorkout.exercises} Preps={selectedWorkout.reps}
+     Pbreaks={selectedWorkout.breaks} Ptitle={selectedWorkout.title} Pdescription={selectedWorkout.description} 
+     Pdifficulty={selectedWorkout.difficulty} PeditId={selectedWorkout.id} closeModal={closeModal}/><button
+              onClick={() => closeModal(null)}
+              className="mt-4 inline-block bg-red-800 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700"
+            >
+              Close
+            </button>
+  </div>
+</div>
+ : (
         <div className="fixed inset-0 flex items-center justify-center z-50">
           <div className="bg-gray-900 absolute inset-0 opacity-75"></div>
           <div className="bg-white p-8 rounded-lg text-black relative">
@@ -73,7 +124,7 @@ const Workouts = ({setImage}) => {
             <p className="mb-2">Reps: {selectedWorkout.reps.join(', ')}</p>
             <p className="mb-2">Breaks: {selectedWorkout.breaks.join(', ')}</p>
             <button
-              onClick={() => toggleModal(null)}
+              onClick={() => closeModal(null)}
               className="mt-4 inline-block bg-red-800 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700"
             >
               Close
@@ -81,13 +132,13 @@ const Workouts = ({setImage}) => {
             {
             canEditModal && 
               <><button
-              onClick={() => toggleModal(null)}
+              onClick={() => setEditSelected(true)}
               className="mt-4 inline-block bg-blue-800 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700"
             >
               Edit
             </button> &nbsp; 
             <button
-              onClick={() => handleDelete(null)}
+              onClick={handleDelete}
               className="mt-4 inline-block bg-red-800 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700"
             >
               Delete
@@ -95,7 +146,7 @@ const Workouts = ({setImage}) => {
             }
           </div>
         </div>
-      )}
+      ))}
     </PageContentWrapper>
   );
 };

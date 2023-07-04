@@ -10,6 +10,7 @@ import NoPage from "./Pages/NoPage";
 import "./styles.css";
 import ElementAdder from "./Pages/ElementAdder";
 import RegisterTrainer from "./Pages/RegisterTrainer";
+import UserRemover from "./Pages/UserRemover";
 
 const NavigationMenu = ({setImage}) =>{
 
@@ -27,6 +28,7 @@ const NavigationMenu = ({setImage}) =>{
                         <Route path="Authentication" element={<Authentication setImage = {setImage}/>} />
                         <Route path="Contact" element={<Contact setImage = {setImage}/>} />
                         <Route path="AddContent" element={<ElementAdder setImage = {setImage}/>} />
+                        <Route path="RemoveUser" element={<UserRemover setImage = {setImage}/>} />
                         <Route path="AddTrainer" element={<RegisterTrainer setImage = {setImage}/>} />
                         <Route path="*" element={<NoPage setImage = {setImage}/>} />
                     </Route>

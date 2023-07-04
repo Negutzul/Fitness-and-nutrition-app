@@ -51,7 +51,7 @@ const MealPlanAdder = () => {
       <div className="w-96">
         <form onSubmit={handleSubmit}>
           <div className="mb-6">
-            <label htmlFor="title" className="block mb-2 text-l font-medium text-gray-100 dark:text-white">
+            <label htmlFor="title" className="block mb-2 text-l font-medium text-black-100 dark:text-white">
               Title
             </label>
             <input
@@ -62,7 +62,7 @@ const MealPlanAdder = () => {
             ></input>
           </div>
           <div className="mb-6">
-            <label htmlFor="description" className="block mb-2 text-l font-medium text-gray-100 dark:text-white">
+            <label htmlFor="description" className="block mb-2 text-l font-medium text-black-100 dark:text-white">
               Description
             </label>
             <input
@@ -75,7 +75,7 @@ const MealPlanAdder = () => {
          
           
           <div className="mb-6">
-            <label htmlFor="bodyType" className="block mb-2 text-l font-medium text-gray-100 dark:text-white">
+            <label htmlFor="bodyType" className="block mb-2 text-l font-medium text-black-100 dark:text-white">
               BodyType
             </label>
             <select

@@ -58,9 +58,13 @@ const RegisterTrainer = ({ setLoginOpen ,setImage}) => {
   return (
     <div>
       {modalVisible &&
-        <div className="modal">
-          <span>{modalMessage}</span>
-          <button onClick={() => setModalVisible(false)}>Close</button>
+      <div className="fixed inset-0 flex items-center justify-center z-50 overflow-auto">
+        <div className="bg-gray-900 absolute inset-0 opacity-75"></div>
+        <div className="bg-white p-8 rounded-lg text-black relative" style={{ maxHeight: '80vh', overflowY: 'auto' }}><div className="modal">
+          <span>{modalMessage}</span> <br/>
+          <button onClick={() => setModalVisible(false)}className="mt-4 inline-block bg-red-800 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700"
+            >Close</button>
+        </div></div>
         </div>
       }
       {<form className="w-full flex justify-center items-center" onSubmit={handleRegisterFormSubmit}>

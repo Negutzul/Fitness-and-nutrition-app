@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-const WorkoutPlanAdder = () => {
+const WorkoutPlanAdder = ({PnumExercises,Pexercises,Preps,Pbreaks,Ptitle,Pdescription,Pdifficulty,PeditId,closeModal}) => {
   const [numExercises, setNumExercises] = useState(0);
   const [exercises, setExercises] = useState([]);
   const [reps, setReps] = useState([]);
@@ -11,6 +11,17 @@ const WorkoutPlanAdder = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [difficulty, setDifficulty] = useState('');
 
+  useEffect(() => {
+    PnumExercises && setNumExercises(PnumExercises)
+    Pexercises && setExercises(Pexercises)
+    Preps && setReps(Preps)
+    Pbreaks && setBreaks(Pbreaks)
+    Ptitle && setTitle(Ptitle)
+    Pdescription && setDescription(Pdescription)
+    Pdifficulty && setDifficulty(Pdifficulty)
+  }, []);
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -18,8 +29,11 @@ const WorkoutPlanAdder = () => {
       const token = JSON.parse(sessionStorage.getItem('access_token'));
 
       try {
-        const response = await fetch('http://localhost:8080/api/workouts/addWorkouts', {
-          method: 'POST',
+        var api = 'http://localhost:8080/api/workouts/addWorkouts';
+        PeditId && (api = 'http://localhost:8080/api/workouts/changeWorkouts/' + PeditId)
+        debugger
+        const response = await fetch(api, {
+          method: PeditId ? 'PUT' :'POST',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
@@ -47,6 +61,7 @@ const WorkoutPlanAdder = () => {
   const handleModalConfirm = () => {
     setIsModalVisible(false);
     handleSubmit(new Event('submit'));
+    closeModal && closeModal()
   };
 
   const handleModalClose = () => {
@@ -82,10 +97,11 @@ const WorkoutPlanAdder = () => {
       <div className="w-96">
         <form onSubmit={handleSubmit}>
           <div className="mb-6">
-            <label htmlFor="title" className="block mb-2 text-l font-medium text-gray-100 dark:text-white">
+            <label htmlFor="title" className="block mb-2 text-l font-medium text-black-100 dark:text-white">
               Title
             </label>
             <input
+              value={title}
               type="text"
               id="title"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -93,10 +109,11 @@ const WorkoutPlanAdder = () => {
             ></input>
           </div>
           <div className="mb-6">
-            <label htmlFor="description" className="block mb-2 text-l font-medium text-gray-100 dark:text-white">
+            <label htmlFor="description" className="block mb-2 text-l font-medium text-black-100 dark:text-white">
               Description
             </label>
             <input
+              value={description}
               type="text"
               id="description"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -104,10 +121,11 @@ const WorkoutPlanAdder = () => {
             ></input>
           </div>
           <div className="mb-6">
-            <label htmlFor="numExercises" className="block mb-2 text-l font-medium text-gray-100 dark:text-white">
+            <label htmlFor="numExercises" className="block mb-2 text-l font-medium text-black-100 dark:text-white">
               Number of exercises:
             </label>
             <input
+              value={numExercises}
               type="number"
               id="numExercises"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -117,10 +135,11 @@ const WorkoutPlanAdder = () => {
           {Array.from({ length: numExercises }, (_, i) => i).map((_, i) => (
             <div key={i}>
               <div className="mb-6">
-                <label htmlFor={`exercise${i}`} className="block mb-2 text-l font-medium text-gray-100 dark:text-white">
+                <label htmlFor={`exercise${i}`} className="block mb-2 text-l font-medium text-black-100 dark:text-white">
                   Exercise {i + 1}:
                 </label>
                 <input
+                  value={exercises[i]}
                   type="text"
                   id={`exercise${i}`}
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -128,10 +147,11 @@ const WorkoutPlanAdder = () => {
                 ></input>
               </div>
               <div className="mb-6">
-                <label htmlFor={`reps${i}`} className="block mb-2 text-l font-medium text-gray-100 dark:text-white">
+                <label htmlFor={`reps${i}`} className="block mb-2 text-l font-medium text-black-100 dark:text-white">
                   Reps:
                 </label>
                 <input
+                  value={reps[i]}
                   type="number"
                   id={`reps${i}`}
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -141,10 +161,11 @@ const WorkoutPlanAdder = () => {
               {i !== numExercises - 1 && (
                 <>
                   <div className="mb-6">
-                    <label htmlFor={`break${i}`} className="block mb-2 text-l font-medium text-gray-100 dark:text-white">
+                    <label htmlFor={`break${i}`} className="block mb-2 text-l font-medium text-black-100 dark:text-white">
                       Break time (in seconds):
                     </label>
                     <input
+                      value={breaks[i]}
                       type="number"
                       id={`break${i}`}
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -157,7 +178,7 @@ const WorkoutPlanAdder = () => {
             </div>
           ))}
           <div className="mb-6">
-            <label htmlFor="difficulty" className="block mb-2 text-l font-medium text-gray-100 dark:text-white">
+            <label htmlFor="difficulty" className="block mb-2 text-l font-medium text-black-100 dark:text-white">
               Difficulty
             </label>
             <select
@@ -176,7 +197,7 @@ const WorkoutPlanAdder = () => {
             type="submit"
             className="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none"
           >
-            Submit Workout Plan
+            Submit {PeditId && "edited"} Workout Plan
           </button>
         </form>
 
