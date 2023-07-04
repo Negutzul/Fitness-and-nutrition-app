@@ -84,6 +84,10 @@ public class WorkoutController {
                 _workoutPlan.setTitle(workoutPlan.getTitle());
                 _workoutPlan.setDescription(workoutPlan.getDescription());
                 _workoutPlan.setPublished(workoutPlan.isPublished());
+                _workoutPlan.setBreaks(workoutPlan.getBreaks());
+                _workoutPlan.setReps(workoutPlan.getReps());
+                _workoutPlan.setDifficulty(workoutPlan.getDifficulty());
+                _workoutPlan.setExercises(workoutPlan.getExercises());
                 return new ResponseEntity<>(workoutRepository.save(_workoutPlan), HttpStatus.OK);
             }else return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -95,19 +99,33 @@ public class WorkoutController {
     @DeleteMapping("/DeleteWorkout/{id}")
     public ResponseEntity<HttpStatus> deleteWorkout(@PathVariable("id") Integer id) {
         try {
-            Optional<WorkoutPlan> workoutData = workoutRepository.findById(id);
+            Optional<WorkoutPlan> workoutDataOptional = workoutRepository.findById(id);
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             User user = (User) authentication.getPrincipal();
-            if(user.getRole().equals(Role.ADMIN) || (user.getRole().equals(Role.TRAINER) && workoutData.get().getUserID() == user.getId())) {
-                favoriteswkInterface.deleteByWorkoutPlanId(workoutData.get().getId());
-                workoutRepository.deleteById(id);
-                return new ResponseEntity<>(HttpStatus.OK);
+            if (workoutDataOptional.isPresent()) {
+                WorkoutPlan workoutData = workoutDataOptional.get();
+                if (user.getRole().equals(Role.ADMIN) || (user.getRole().equals(Role.TRAINER) && workoutData.getUserID().equals(user.getId()))) {
+
+                    // Clear the associated collections
+                    workoutData.getExercises().clear();
+                    workoutData.getReps().clear();
+                    workoutData.getBreaks().clear();
+
+                    // Save the WorkoutPlan with cleared collections
+                    workoutRepository.save(workoutData);
+                    favoriteswkInterface.deleteByWorkoutPlanId(workoutData.getId());
+                    // Delete the WorkoutPlan
+                    workoutRepository.deleteById(id);
+
+                    return new ResponseEntity<>(HttpStatus.OK);
+                }
             }
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @DeleteMapping("/DeleteWorkout")
     public ResponseEntity<HttpStatus> deleteAllWorkouts() {
         try {

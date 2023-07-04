@@ -72,9 +72,27 @@ public class MealPlanController {
                 MealPlan _mealPlan = mealData.get();
                 _mealPlan.setTitle(mealPlan.getTitle());
                 _mealPlan.setDescription(mealPlan.getDescription());
+                _mealPlan.setBodyType(mealPlan.getBodyType());
                 _mealPlan.setPublished(mealPlan.isPublished());
                 return new ResponseEntity<>(mealPlanRepository.save(_mealPlan), HttpStatus.OK);
             }else return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @DeleteMapping("/deleteMealPlan/{id}")
+    public ResponseEntity<HttpStatus> deleteMealPlan(@PathVariable("id") Integer id) {
+        Optional<MealPlan> mealData = mealPlanRepository.findById(id);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        if (mealData.isPresent()) {
+            if(user.getRole().equals(Role.ADMIN) || (user.getRole().equals(Role.TRAINER) && mealData.get().getUserID() == user.getId())) {
+                mealPlanRepository.deleteById(id);
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            } else {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
