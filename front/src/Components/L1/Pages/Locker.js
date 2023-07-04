@@ -47,7 +47,7 @@ const Locker = ({setImage}) => {
   }, []);
 
   const handleSubmit = () => {
-    const token = sessionStorage.getItem('access_token');
+    const token = JSON.parse(sessionStorage.getItem('access_token'));
     fetch('http://localhost:8080/api/locker/putLockerContent', {
       method: 'PUT',
       headers: {
@@ -71,6 +71,12 @@ const Locker = ({setImage}) => {
 
   };
 
+  const handleMessage = ()=>{
+    if(message == "Edit Successful") 
+      return styles.message 
+    return styles.badmessage
+
+  }
   return (
     <div className={styles.lockerContainer}>
       <h2 className={styles.welcomeMessage}>{welcomeMessage}</h2>
@@ -122,7 +128,7 @@ const Locker = ({setImage}) => {
 </Modal>
   
       {message && (
-        <div className={styles.message}>
+        <div className={handleMessage()}>
           {message}
         </div>
       )}

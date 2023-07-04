@@ -76,3 +76,12 @@
   border-radius: 20px;
   padding: 10px;
 }
+.badmessage {
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: 700;
+  color: red;
+  background: #f8e6e2;
+  border-radius: 20px;
+  padding: 10px;
+}
