@@ -68,7 +68,7 @@ public class MealPlanController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         if (mealData.isPresent()) {
-            if(user.getRole().equals(Role.ADMIN) || (user.getRole().equals(Role.TRAINER) && mealData.get().getUserID() == user.getId())) {
+            if(user.getRole().equals(Role.ADMIN) || (user.getRole().equals(Role.TRAINER) && mealData.get().getUserID().intValue() == user.getId().intValue())) {
                 MealPlan _mealPlan = mealData.get();
                 _mealPlan.setTitle(mealPlan.getTitle());
                 _mealPlan.setDescription(mealPlan.getDescription());

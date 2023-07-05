@@ -79,7 +79,7 @@ public class WorkoutController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         if (workoutData.isPresent()) {
-            if(user.getRole().equals(Role.ADMIN) || (user.getRole().equals(Role.TRAINER) && workoutData.get().getUserID() == user.getId())) {
+            if(user.getRole().equals(Role.ADMIN) || (user.getRole().equals(Role.TRAINER) && workoutData.get().getUserID().intValue() == user.getId().intValue())) {
                 WorkoutPlan _workoutPlan = workoutData.get();
                 _workoutPlan.setTitle(workoutPlan.getTitle());
                 _workoutPlan.setDescription(workoutPlan.getDescription());

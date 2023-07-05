@@ -173,9 +173,9 @@ return (
         <div className={styles['modal-overlay']}>
           <div className={styles['meal-plan-modal']}>
           
+          
           <h2>Title: {selectedMealPlan.title}</h2>
-          <p></p>
-
+          <p>Author id: {selectedMealPlan.userID}</p>
           <p>Description: {selectedMealPlan.description}</p>
         
           <p></p>

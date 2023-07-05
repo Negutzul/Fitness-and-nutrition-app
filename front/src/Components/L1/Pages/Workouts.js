@@ -123,6 +123,7 @@ const Workouts = ({setImage}) => {
           <div className="bg-gray-900 absolute inset-0 opacity-75"></div>
           <div className="bg-white p-8 rounded-lg text-black relative">
             <h2 className="text-2xl font-semibold mb-4">{selectedWorkout.title}</h2>
+            <p className="mb-2">Author id: {selectedWorkout.userID}</p>
             <p className="mb-2">Description: {selectedWorkout.description}</p>
             <p className="mb-2">Difficulty: {selectedWorkout.difficulty}</p>
             <p className="mb-2">Published: {selectedWorkout.published ? 'Yes' : 'No'}</p>
